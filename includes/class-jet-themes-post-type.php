@@ -20,6 +20,9 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 		 */
 		private static $instance = null;
 
+		private $terms_alias    = array();
+		private $property_alias = array();
+
 		/**
 		 * Constructor for the class
 		 */
@@ -70,6 +73,8 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 
 			register_post_type( $this->slug(), $args );
 
+			$this->register_taxonomies();
+
 		}
 
 		/**
@@ -79,6 +84,68 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 		 */
 		public function slug() {
 			return 'theme';
+		}
+
+		/**
+		 * Register related taxonomies
+		 *
+		 * @return void
+		 */
+		public function register_taxonomies() {
+
+			$taxes          = $this->required_taxonomies();
+			$optional_taxes = $this->get_prop_taxonomies();
+
+			if ( ! empty( $optional_taxes ) ) {
+				$prop_taxonomies = array_merge( $this->default_prop_taxonomies(), $optional_taxes );
+			} else {
+				$prop_taxonomies = $this->default_prop_taxonomies();
+			}
+
+			foreach ( $taxes as $tax => $data ) {
+				$this->terms_alias[ $data['key'] ] = $tax;
+				register_taxonomy( $tax, $this->slug(), array(
+					'label' => $data['name'],
+				) );
+			}
+
+			foreach ( $prop_taxonomies as $tax => $data ) {
+				$this->property_alias[ $data['property'] ] = $tax;
+				register_taxonomy( $tax, $this->slug(), array(
+					'label' => $data['name'],
+				) );
+			}
+
+		}
+
+		/**
+		 * Returns prop taxonomies list
+		 *
+		 * @return
+		 */
+		public function get_prop_taxonomies() {
+
+			$taxes = jet_themes_settings()->get( 'jet-property-taxonomies' );
+
+			if ( ! $taxes ) {
+				return array();
+			}
+
+			$result = array();
+
+			foreach ( $taxes as $tax ) {
+
+				if ( empty( $tax['slug'] ) || empty( $tax['name'] ) || empty( $tax['property'] ) ) {
+					continue;
+				}
+
+				$result[ $tax['slug'] ] = array(
+					'name'     => $tax['name'],
+					'property' => $tax['property'],
+				);
+			}
+
+			return $result;
 		}
 
 		/**

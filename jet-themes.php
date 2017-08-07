@@ -207,15 +207,6 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 
 			$this->load_files();
 
-			$author = jet_themes_settings()->get( 'jet-author-id' );
-			$type   = jet_themes_settings()->get( 'jet-type' );
-
-			$themes = jet_themes_api( array( 'author' => $author, 'type' => $type ) )->request_themes( array(
-				'sort'     => '-date',
-				'state'    => 1,
-				'per-page' => 10,
-			) );
-
 		}
 
 		/**
@@ -245,6 +236,11 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 					'function' => 'jet_themes_handle_page',
 					'is_admin' => true,
 					'init'     => true,
+				),
+				'includes/admin/class-jet-themes-manager.php' => array(
+					'function' => 'jet_themes_manager',
+					'is_admin' => true,
+					'init'     => false,
 				),
 			);
 

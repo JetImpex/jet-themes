@@ -239,8 +239,13 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 				),
 				'includes/admin/class-jet-themes-manager.php' => array(
 					'function' => 'jet_themes_manager',
-					'is_admin' => true,
+					'is_admin' => false,
 					'init'     => false,
+				),
+				'includes/class-jet-themes-sheduled.php' => array(
+					'function' => 'jet_themes_sheduled',
+					'is_admin' => false,
+					'init'     => true,
 				),
 			);
 

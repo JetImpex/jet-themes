@@ -117,7 +117,7 @@ if ( ! class_exists( 'Jet_Themes_Handle_Page' ) ) {
 				),
 			);
 
-			if ( ! empty( $this->result ) ) {
+			if ( null !== $this->results ) {
 				$sections = array_merge(
 					array(
 						'handler_results' => array(
@@ -131,7 +131,7 @@ if ( ! class_exists( 'Jet_Themes_Handle_Page' ) ) {
 
 			$this->builder->register_settings( $sections );
 
-			if ( ! empty( $this->result ) ) {
+			if ( null !== $this->results ) {
 				$this->builder->register_html(
 					array(
 						'results_html' => array(
@@ -211,7 +211,9 @@ if ( ! class_exists( 'Jet_Themes_Handle_Page' ) ) {
 		 * @return [type] [description]
 		 */
 		public function get_results() {
-			return $this->results;
+			return sprintf(
+				'<div class="cherry-ui-kit cherry-control">%s theme(s) was inserted.</div>', absint( $this->results )
+			);
 		}
 
 		/**
@@ -232,13 +234,11 @@ if ( ! class_exists( 'Jet_Themes_Handle_Page' ) ) {
 			$data = array(
 				'sort'     => isset( $_POST['sort'] ) ? esc_attr( $_POST['sort'] ) : '-inserted_date',
 				'state'    => isset( $_POST['state'] ) ? absint( $_POST['state'] ) : 1,
-				'per-page' => isset( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 30,
+				'per-page' => isset( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 10,
 				'page'     => isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1,
 			);
 
-			$result = jet_themes_manager()->insert_themes( $data );
-
-			die();
+			$this->results = jet_themes_manager()->insert_themes( $data );
 
 		}
 

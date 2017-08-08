@@ -29,6 +29,7 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 		public function init() {
 
 			$this->register();
+			$this->init_meta();
 
 		}
 
@@ -75,6 +76,24 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 
 			$this->register_taxonomies();
 
+		}
+
+		/**
+		 * Returns property alias
+		 *
+		 * @return void
+		 */
+		public function terms_alias() {
+			return $this->terms_alias;
+		}
+
+		/**
+		 * Returns property alias
+		 *
+		 * @return void
+		 */
+		public function property_alias() {
+			return $this->property_alias;
 		}
 
 		/**
@@ -188,6 +207,34 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 					'property' => 'styles',
 				),
 			) );
+		}
+
+		/**
+		 * Initialize themes meta data
+		 *
+		 * @return [type] [description]
+		 */
+		public function init_meta() {
+
+			jet_themes()->get_core()->init_module( 'cherry-post-meta', array(
+				'id'            => 'themes-data',
+				'title'         => esc_html__( 'Themes Data', 'jet-themes' ),
+				'page'          => array( $this->slug() ),
+				'context'       => 'normal',
+				'priority'      => 'low',
+				'callback_args' => false,
+				'fields'        => array(
+					'jet_live_demo' => array(
+						'type'  => 'text',
+						'title' => esc_html__( 'Live Demo URL', 'jet-themes' ),
+					),
+					'jet_theme_page' => array(
+						'type'  => 'text',
+						'title' => esc_html__( 'Theme Page URL', 'jet-themes' ),
+					),
+				),
+			) );
+
 		}
 
 		/**

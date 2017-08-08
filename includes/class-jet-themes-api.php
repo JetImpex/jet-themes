@@ -49,7 +49,8 @@ if ( ! class_exists( 'Jet_Themes_API' ) ) {
 				$params['properties']['author_user_id'] = $this->auth['author'];
 			}
 
-			$params['type'] = $this->auth['type'];
+			$params['type']   = $this->auth['type'];
+			$params['expand'] = 'properties';
 
 			$url      = add_query_arg( $params, $this->api );
 			$response = wp_remote_get( $url, array(

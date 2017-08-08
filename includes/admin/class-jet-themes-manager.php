@@ -71,27 +71,160 @@ if ( ! class_exists( 'Jet_Themes_Manager' ) ) {
 		 */
 		public function insert_theme( $data = array() ) {
 
-			//var_dump( $data );
-
-			$post_data = array(
-				'post_name'  => isset( $data['templateId'] ) ? $data['templateId'] : false,
-				'post_title' => isset( $data['templateFullTitle'] ) ? $data['templateFullTitle'] : false,
-			);
-
-			$meta_input = array(
-				'jet_live_demo'  => '',
-				'jet_theme_page' => '',
-			);
-
-			//$thumb_id = $this->import_thumb( $data );
-			$thumb_id = false;
-
-			if ( $thumb_id ) {
-				$meta_input['_thumbnail_id'] = $thumb_id;
+			if ( $this->is_theme_exists( $data['templateId'] ) ) {
+				return false;
 			}
 
-			var_dump( $thumb_id );
+			$post_data = array(
+				'post_type'   => jet_themes_post_type()->slug(),
+				'post_name'   => isset( $data['templateId'] ) ? $data['templateId'] : false,
+				'post_date'   => date( 'Y-m-d H:i:s', strtotime( $data['inserted_date'] ) ),
+				'post_status' => 'publish',
+				'post_title'  => isset( $data['templateFullTitle'] ) ? $data['templateFullTitle'] : false,
+			);
 
+			$properties_data = $this->walk_properties( $data['properties'] );
+			$terms_data      = $this->walk_terms( $data );
+
+			$post_data['meta_input'] = array(
+				'jet_live_demo'  => isset( $properties_data['live_demo'] ) ? $properties_data['live_demo'][0] : false,
+				'jet_theme_page' => sprintf(
+					'https://www.templatemonster.com/%s/%s.html',
+					$data['templateType']['typeUrl'],
+					$data['templateId']
+				),
+			);
+
+			$thumb_id = $this->import_thumb( $data );
+
+			if ( $thumb_id ) {
+				$post_data['meta_input']['_thumbnail_id'] = $thumb_id;
+			}
+
+			$post_data['tax_input'] = $this->prepare_terms_input( array_merge( $properties_data, $terms_data ) );
+
+			update_option( $data['templateId'], $post_data );
+
+			$post_id = wp_insert_post( $post_data );
+
+			if ( ! $post_id || is_wp_error( $post_id ) ) {
+				return false;
+			}
+
+			return $post_id;
+
+		}
+
+		/**
+		 * Check if theme already exists
+		 *
+		 * @param  [type]  $theme_id [description]
+		 * @return boolean           [description]
+		 */
+		public function is_theme_exists( $theme_id ) {
+
+			global $wpdb;
+
+			$id        = absint( $theme_id );
+			$post_type = jet_themes_post_type()->slug();
+			$query     = "
+				SELECT post_name
+				FROM {$wpdb->posts}
+				WHERE post_name LIKE '%{$id}%' AND post_type = '{$post_type}'
+			";
+
+			$exists = $wpdb->get_var( $query );
+
+			if ( $exists ) {
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+
+		/**
+		 * Repare terms input
+		 *
+		 * @param  [type] $terms_data [description]
+		 * @return [type]             [description]
+		 */
+		public function prepare_terms_input( $terms_data ) {
+
+			$taxes  = get_object_taxonomies( jet_themes_post_type()->slug(), ARRAY_A );
+			$taxes  = array_keys( $taxes );
+			$result = array();
+
+			foreach ( $taxes as $tax ) {
+				if ( isset( $terms_data[ $tax ] ) ) {
+					$result[ $tax ] = implode( ', ', $terms_data[ $tax ] );
+				}
+			}
+
+			return $result;
+
+		}
+
+		/**
+		 * Prepare required terms
+		 *
+		 * @param  [type] $data [description]
+		 * @return [type]       [description]
+		 */
+		public function walk_terms( $data ) {
+
+			$result = array();
+
+			foreach ( jet_themes_post_type()->terms_alias() as $key => $tax ) {
+
+				if ( ! isset( $data[ $key ] ) ) {
+					continue;
+				}
+
+				if ( is_array( $data[ $key ] ) ) {
+					$result[ $tax ] = array( $data[ $key ]['categoryName'] );
+				} else {
+					$result[ $tax ] = array( $data[ $key ] );
+				}
+
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Properties walker.
+		 *
+		 * @param  [type] $properties [description]
+		 * @return [type]             [description]
+		 */
+		public function walk_properties( $properties ) {
+
+			$map = array(
+				'livepreviewurl' => 'live_demo',
+			);
+			$result = array();
+
+			$map = array_merge( $map, jet_themes_post_type()->property_alias() );
+
+			foreach ( $properties as $property ) {
+
+				if( ! isset( $map[ $property['propertyUrlName'] ] ) ) {
+					continue;
+				}
+
+				$key   = $map[ $property['propertyUrlName'] ];
+				$value = $property['value'];
+
+				if ( empty( $result[ $key ] ) ) {
+					$result[ $key ] = array();
+				}
+
+				$result[ $key ][] = $value;
+
+			}
+
+			return $result;
 		}
 
 		/**

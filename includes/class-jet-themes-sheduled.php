@@ -39,7 +39,7 @@ if ( ! class_exists( 'Jet_Themes_Sheduled' ) ) {
 			$timestamp = wp_next_scheduled( $this->sheduled_action );
 
 			if ( false === $timestamp ) {
-				wp_schedule_event( time(), 'minute', $this->sheduled_action );
+				wp_schedule_event( time(), 'daily', $this->sheduled_action );
 			}
 
 			add_action( $this->sheduled_action, array( $this, 'get_latest_themes' ) );

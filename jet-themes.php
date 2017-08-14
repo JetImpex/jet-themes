@@ -232,6 +232,21 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 					'is_admin' => false,
 					'init'     => false,
 				),
+				'includes/class-jet-themes-sheduled.php' => array(
+					'function' => 'jet_themes_sheduled',
+					'is_admin' => false,
+					'init'     => true,
+				),
+				'includes/class-jet-themes-filters-api.php' => array(
+					'function' => 'jet_themes_filters_api',
+					'is_admin' => false,
+					'init'     => true,
+				),
+				'includes/class-jet-themes-shortcode.php' => array(
+					'function' => 'jet_themes_shortcode',
+					'is_admin' => false,
+					'init'     => true,
+				),
 				'includes/admin/class-jet-themes-handle-page.php' => array(
 					'function' => 'jet_themes_handle_page',
 					'is_admin' => true,
@@ -241,11 +256,6 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 					'function' => 'jet_themes_manager',
 					'is_admin' => false,
 					'init'     => false,
-				),
-				'includes/class-jet-themes-sheduled.php' => array(
-					'function' => 'jet_themes_sheduled',
-					'is_admin' => false,
-					'init'     => true,
 				),
 			);
 
@@ -346,38 +356,9 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 			wp_register_script(
 				'jet-themes',
 				$this->plugin_url( 'assets/js/jet-themes.js' ),
-				array( 'jquery' ),
+				array( 'jquery', 'wp-api', 'wp-util' ),
 				$this->get_version(),
 				true
-			);
-
-			wp_register_script(
-				'clipboard',
-				$this->plugin_url( 'assets/js/vendor/clipboard.min.js' ),
-				array( 'jquery' ),
-				'1.6.1',
-				true
-			);
-
-			$data = apply_filters( 'jet_themes/localize_data', array(
-				'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
-			) );
-
-			wp_localize_script( 'jet-themes', 'jetThemesSettings', $data );
-
-			wp_enqueue_style(
-				'jet-themes', $this->plugin_url( 'assets/css/jet-themes.css' ), false, $this->get_version()
-			);
-
-			wp_enqueue_style(
-				'nucleo-outline', $this->plugin_url( 'assets/css/nucleo-outline.css' ), false, $this->get_version()
-			);
-
-			$this->get_core()->init_module(
-				'cherry5-assets-loader',
-				array(
-					'css' => array( 'jet-themes', 'nucleo-outline' ),
-				)
 			);
 		}
 

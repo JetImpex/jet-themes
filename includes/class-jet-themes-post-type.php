@@ -58,18 +58,21 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 			);
 
 			$args = array(
-				'labels'             => $labels,
-				'public'             => true,
-				'publicly_queryable' => true,
-				'show_ui'            => true,
-				'show_in_menu'       => true,
-				'query_var'          => true,
-				'rewrite'            => array( 'slug' => $this->slug() ),
-				'capability_type'    => 'post',
-				'has_archive'        => true,
-				'hierarchical'       => false,
-				'menu_icon'          => 'dashicons-list-view',
-				'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' )
+				'labels'                => $labels,
+				'public'                => true,
+				'publicly_queryable'    => true,
+				'show_ui'               => true,
+				'show_in_menu'          => true,
+				'query_var'             => true,
+				'rewrite'               => array( 'slug' => $this->slug() ),
+				'capability_type'       => 'post',
+				'has_archive'           => true,
+				'hierarchical'          => false,
+				'show_in_rest'          => true,
+				'rest_base'             => $this->slug(),
+				'rest_controller_class' => 'WP_REST_Posts_Controller',
+				'menu_icon'             => 'dashicons-list-view',
+				'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt' )
 			);
 
 			register_post_type( $this->slug(), $args );
@@ -124,14 +127,16 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 			foreach ( $taxes as $tax => $data ) {
 				$this->terms_alias[ $data['key'] ] = $tax;
 				register_taxonomy( $tax, $this->slug(), array(
-					'label' => $data['name'],
+					'label'        => $data['name'],
+					'show_in_rest' => true,
 				) );
 			}
 
 			foreach ( $prop_taxonomies as $tax => $data ) {
 				$this->property_alias[ $data['property'] ] = $tax;
 				register_taxonomy( $tax, $this->slug(), array(
-					'label' => $data['name'],
+					'label'        => $data['name'],
+					'show_in_rest' => true,
 				) );
 			}
 

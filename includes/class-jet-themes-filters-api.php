@@ -27,12 +27,86 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 		 */
 		private static $instance = null;
 
+		public $namespace     = 'jet/v1';
+		public $filters_route = '/filters';
+
 		/**
 		 * Constructor for the class
 		 */
 		public function init() {
 			add_action( 'rest_api_init', array( $this, 'update_api_endpoint' ) );
+			add_action( 'rest_api_init', array( $this, 'add_endpoints' ) );
 			add_action( 'wp_footer', array( $this, 'print_templates' ) );
+
+			add_image_size( 'jet-themes', 350, 350, array( 'center', 'top' ) );
+		}
+
+		public function get_filters_route() {
+			return $this->namespace . $this->filters_route;
+		}
+
+		public function add_endpoints() {
+
+			register_rest_route( $this->namespace, $this->filters_route, array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_filters' ),
+			) );
+		}
+
+		/**
+		 * Return all available filters with terms
+		 *
+		 * @return [type] [description]
+		 */
+		public function get_filters() {
+
+			$taxonomies = get_object_taxonomies( jet_themes_post_type()->slug(), ARRAY_A );
+
+			if ( empty( $taxonomies ) ) {
+				return array();
+			}
+
+			$result = array();
+
+			foreach ( $taxonomies as $tax => $data ) {
+				$result[] = array(
+					'tax'   => $tax,
+					'label' => $data->label,
+					'terms' => $this->get_terms_list( $tax ),
+				);
+			}
+
+			return $result;
+
+		}
+
+		/**
+		 * Returns terms list for passed taxonomy
+		 *
+		 * @param  [type] $tax [description]
+		 * @return [type]      [description]
+		 */
+		public function get_terms_list( $tax ) {
+
+			$terms = get_terms( array(
+				'taxonomy'   => $tax,
+				'hide_empty' => false,
+			) );
+
+			$result = array();
+
+			if ( empty( $terms ) ) {
+				return $result;
+			}
+
+			foreach ( $terms as $term ) {
+				$result[] = array(
+					'term_id' => $term->term_id,
+					'name'    => $term->name,
+				);
+			}
+
+			return $result;
 		}
 
 		/**
@@ -69,7 +143,7 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 		 * @return [type] [description]
 		 */
 		public function featured_media_src( $object, $field_name, $request ) {
-			return wp_get_attachment_image_url( $object['featured_media'], 'full' );
+			return wp_get_attachment_image_url( $object['featured_media'], 'jet-themes' );
 		}
 
 		/**

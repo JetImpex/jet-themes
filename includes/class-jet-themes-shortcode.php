@@ -39,11 +39,20 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 			wp_enqueue_script( 'jet-themes' );
 
 			wp_localize_script( 'jet-themes', 'jetThemesSettings', array(
-				'slug'    => jet_themes_post_type()->slug(),
-				'perPage' => 1,
+				'slug'               => jet_themes_post_type()->slug(),
+				'perPage'            => 6,
+				'filtersRoute'       => jet_themes_filters_api()->get_filters_route(),
+				'activeFiltersTitle' => 'Active Filters',
 			) );
 
-			return '<button class="theme-filter__item">Filter</button><div class="themes-wrap">Loading...</div><button class="theme-more">More</button>';
+			$result = array(
+				'active_filters' => '<div class="active-filters"></div>',
+				'all_filters'    => '<div class="filters-wrap"></div>',
+				'themes'         => '<div class="themes-wrap">Loading...</div>',
+				'more'           => '<div class="more-wrap"></div>',
+			);
+
+			return implode( '', $result );
 
 		}
 

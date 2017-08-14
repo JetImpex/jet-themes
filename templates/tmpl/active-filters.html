@@ -1,0 +1,10 @@
+<# if ( ! _.isEmpty( data.activeFilters ) ) { #>
+<div class="active-filters__title">{{{ data.title }}}</div>
+<# } #>
+<# _.each( data.activeFilters, function( filter ) { #>
+	<# if ( ! _.isEmpty( filter ) ) { #>
+	<span class="active-filters__item" data-tax="{{{ filter.tax }}}" data-term="{{{ filter.term }}}">
+		{{{ filter.label }}}
+	</span>
+	<# } #>
+<# } ); #>

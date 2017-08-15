@@ -31,6 +31,19 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 			$this->register();
 			$this->init_meta();
 
+		//	add_action( 'wp', array( $this, 'single_page_redirect' ) );
+
+		}
+
+		/**
+		 * Redirect single theme page on purchase page
+		 *
+		 * @return void
+		 */
+		public function single_page_redirect() {
+
+			var_dump( get_the_id() );
+
 		}
 
 		/**
@@ -147,7 +160,7 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 			$default = $this->default_prop_taxonomies();
 
 			if ( ! $taxes ) {
-				return array();
+				return $default;
 			}
 
 			$result = array();

@@ -115,14 +115,8 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 		 */
 		public function register_taxonomies() {
 
-			$taxes          = $this->required_taxonomies();
-			$optional_taxes = $this->get_prop_taxonomies();
-
-			if ( ! empty( $optional_taxes ) ) {
-				$prop_taxonomies = array_merge( $this->default_prop_taxonomies(), $optional_taxes );
-			} else {
-				$prop_taxonomies = $this->default_prop_taxonomies();
-			}
+			$taxes           = $this->required_taxonomies();
+			$prop_taxonomies = $this->get_prop_taxonomies();
 
 			foreach ( $taxes as $tax => $data ) {
 				$this->terms_alias[ $data['key'] ] = $tax;
@@ -149,7 +143,8 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 		 */
 		public function get_prop_taxonomies() {
 
-			$taxes = jet_themes_settings()->get( 'jet-property-taxonomies' );
+			$taxes   = jet_themes_settings()->get( 'jet-property-taxonomies' );
+			$default = $this->default_prop_taxonomies();
 
 			if ( ! $taxes ) {
 				return array();
@@ -166,10 +161,11 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 				$result[ $tax['slug'] ] = array(
 					'name'     => $tax['name'],
 					'property' => $tax['property'],
+					'enabled'  => isset( $tax['enabled'] ) ? $tax['enabled'] : 'yes',
 				);
 			}
 
-			return $result;
+			return array_merge( $default, $result );
 		}
 
 		/**
@@ -198,18 +194,22 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 				'topic' => array(
 					'name'     => esc_html__( 'Topic', 'jet-elements' ),
 					'property' => 'topic',
+					'enabled'  => 'yes',
 				),
 				'features' => array(
 					'name'     => esc_html__( 'Features', 'jet-elements' ),
 					'property' => 'features',
+					'enabled'  => 'yes',
 				),
 				'engine' => array(
 					'name'     => esc_html__( 'Engine', 'jet-elements' ),
 					'property' => 'wordpress-engine',
+					'enabled'  => 'yes',
 				),
 				'styles' => array(
 					'name'     => esc_html__( 'Style', 'jet-elements' ),
 					'property' => 'styles',
+					'enabled'  => 'yes',
 				),
 			) );
 		}

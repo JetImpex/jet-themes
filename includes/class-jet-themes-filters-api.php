@@ -66,9 +66,15 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 				return array();
 			}
 
-			$result = array();
+			$result       = array();
+			$tax_settings = jet_themes_post_type()->get_prop_taxonomies();
 
 			foreach ( $taxonomies as $tax => $data ) {
+
+				if ( isset( $tax_settings[ $tax ]['enabled'] ) && 'no' === $tax_settings[ $tax ]['enabled'] ) {
+					continue;
+				}
+
 				$result[] = array(
 					'tax'   => $tax,
 					'label' => $data->label,
@@ -120,6 +126,7 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 				'featured_media_src',
 				'live_demo_url',
 				'theme_url',
+				'template_category',
 
 			);
 
@@ -136,6 +143,26 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 
 			}
 
+		}
+
+		/**
+		 * Get templates category
+		 *
+		 * @param  [type] $object     [description]
+		 * @param  [type] $field_name [description]
+		 * @param  [type] $request    [description]
+		 * @return [type]             [description]
+		 */
+		public function template_category( $object, $field_name, $request ) {
+
+			$terms = wp_get_post_terms( $object['id'], 'template-category' );
+
+			if ( empty( $terms ) ) {
+				return '';
+			}
+
+			$term = $terms[0];
+			return $term->name;
 		}
 
 		/**

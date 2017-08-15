@@ -118,6 +118,9 @@
 			$( document ).on( 'click', '.theme-filter__item:not(.active-filter)', jetThemes.handleFilter );
 			$( document ).on( 'click', '.theme-filter__label', jetThemes.handleFiltersNav );
 			$( document ).on( 'click', jetThemes.closeFiltersNav );
+			$( window ).on( 'resize', jetThemes.setNavClass );
+
+			jetThemes.setNavClass();
 
 		},
 
@@ -126,6 +129,19 @@
 				var filters = new filtersView( { collection: filtersData } );
 				$( '.filters-wrap' ).html( filters.render().el );
 			} );
+		},
+
+		setNavClass: function() {
+
+			var width      = $( document ).width(),
+				breakpoint = parseInt( settings.mobileBreakpoint );
+
+			if ( width < breakpoint ) {
+				$( '.filters-wrap:not(.filters-mobile)' ).addClass( 'filters-mobile' );
+			} else {
+				$( '.filters-wrap.filters-mobile' ).removeClass( 'filters-mobile' );
+			}
+
 		},
 
 		handleFilter: function( event ) {

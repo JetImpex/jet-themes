@@ -34,7 +34,13 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 			add_shortcode( 'jet_themes', array( $this, '_shortcode' ) );
 		}
 
-		public function _shortcode() {
+		public function _shortcode( $atts = array() ) {
+
+			$atts = shortcode_atts( array(
+				'active_filters'    => 'yes',
+				'mobile_breakpoint' => 700,
+				'mobile_label'      => 'Filters',
+			), $atts );
 
 			wp_enqueue_script( 'jet-themes' );
 
@@ -43,14 +49,19 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 				'perPage'            => 6,
 				'filtersRoute'       => jet_themes_filters_api()->get_filters_route(),
 				'activeFiltersTitle' => 'Active Filters',
+				'mobileBreakpoint'   => $atts['mobile_breakpoint'],
+				'mobileLabel'        => $atts['mobile_label'],
 			) );
 
 			$result = array(
-				'active_filters' => '<div class="active-filters"></div>',
 				'all_filters'    => '<div class="filters-wrap"></div>',
 				'themes'         => '<div class="themes-wrap">Loading...</div>',
 				'more'           => '<div class="more-wrap"></div>',
 			);
+
+			if ( 'yes' === $atts['active_filters'] ) {
+				$result = array_merge( array( 'active_filters' => '<div class="active-filters"></div>' ), $result );
+			}
 
 			return implode( '', $result );
 

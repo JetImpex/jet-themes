@@ -31,7 +31,7 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 			$this->register();
 			$this->init_meta();
 
-		//	add_action( 'wp', array( $this, 'single_page_redirect' ) );
+			add_action( 'wp', array( $this, 'single_page_redirect' ) );
 
 		}
 
@@ -42,7 +42,18 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 		 */
 		public function single_page_redirect() {
 
-			var_dump( get_the_id() );
+			if ( ! is_singular( is_singular( $this->slug() ) ) ) {
+				return;
+			}
+
+			$theme_url = get_post_meta( get_the_id(), 'jet_theme_page', true );
+
+			if ( ! $theme_url ) {
+				return;
+			}
+
+			wp_redirect( $theme_url );
+			die();
 
 		}
 

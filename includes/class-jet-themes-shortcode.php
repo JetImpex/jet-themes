@@ -50,11 +50,12 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 				'filtersRoute'       => jet_themes_filters_api()->get_filters_route(),
 				'activeFiltersTitle' => 'Active Filters',
 				'mobileBreakpoint'   => $atts['mobile_breakpoint'],
-				'mobileLabel'        => $atts['mobile_label'],
 			) );
 
+			$mobile_trigger = sprintf( '<div class="filters-mobile-trigger">%s</div>', $atts['mobile_label'] );
+
 			$result = array(
-				'all_filters'    => '<div class="filters-wrap"></div>',
+				'all_filters'    => sprintf( '<div class="filters-wrap">%s</div>', $mobile_trigger ),
 				'themes'         => '<div class="themes-wrap">Loading...</div>',
 				'more'           => '<div class="more-wrap"></div>',
 			);

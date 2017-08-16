@@ -1,5 +1,6 @@
 <button class="theme-filter__label">{{{ data.label }}}</button>
 <div class="theme-filter__terms">
+	<span class="theme-filter__back">&lt; Back</span>
 	<# _.each( data.terms, function( term ) { #>
 		<a href="#" class="theme-filter__item" data-tax="{{{ data.tax }}}" data-term="{{{ term.term_id }}}">{{{ term.name }}}</a>
 	<# } ); #>

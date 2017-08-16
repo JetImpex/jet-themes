@@ -207,7 +207,7 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 				}
 
 				$name = $parts['filename'];
-				$path = locate_template( $template );
+				$path = locate_template( 'jet-themes/tmpl/' . $template );
 
 				if ( ! $path ) {
 					$path = jet_themes()->plugin_path( 'templates/tmpl/' . $template );

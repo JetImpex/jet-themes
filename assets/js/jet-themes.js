@@ -53,6 +53,8 @@
 
 		render: function() {
 
+			this.$el.append( '<span class="theme-filters__back">&lt; Back</span>' );
+
 			this.collection.each( function( filter ) {
 				var currentView = new itemView( {
 					model: filter,
@@ -117,6 +119,8 @@
 			$( document ).on( 'click', '.theme-filter__item.active-filter', jetThemes.removeFilter );
 			$( document ).on( 'click', '.theme-filter__item:not(.active-filter)', jetThemes.handleFilter );
 			$( document ).on( 'click', '.theme-filter__label', jetThemes.handleFiltersNav );
+			$( document ).on( 'click', '.filters-mobile-trigger', jetThemes.switchNavPlane );
+			$( document ).on( 'click', '.theme-filters__back', jetThemes.switchNavPlane );
 			$( document ).on( 'click', jetThemes.closeFiltersNav );
 			$( window ).on( 'resize', jetThemes.setNavClass );
 
@@ -127,7 +131,7 @@
 		getFilters: function(){
 			filtersData.fetch().done( function() {
 				var filters = new filtersView( { collection: filtersData } );
-				$( '.filters-wrap' ).html( filters.render().el );
+				$( '.filters-wrap' ).append( filters.render().el );
 			} );
 		},
 
@@ -142,6 +146,14 @@
 				$( '.filters-wrap.filters-mobile' ).removeClass( 'filters-mobile' );
 			}
 
+		},
+
+		switchNavPlane: function() {
+			if ( $( '.theme-filters.visible-filters' ).length ) {
+				$( '.theme-filters.visible-filters' ).removeClass( 'visible-filters' );
+			} else {
+				$( '.theme-filters' ).addClass( 'visible-filters' );
+			}
 		},
 
 		handleFilter: function( event ) {

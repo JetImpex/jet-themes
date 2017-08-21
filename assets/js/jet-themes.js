@@ -172,6 +172,7 @@
 				}
 
 				$this.closest( '.theme-filter__terms' ).removeClass( 'visible-filter' ).prev().removeClass( 'is-active' );
+				$this.closest( '.filters-mobile' ).find( '.theme-filters.visible-filters' ).removeClass( 'visible-filters' );
 				$this.addClass( 'active-filter' );
 
 				if ( _.isEmpty( activeFilters ) ) {

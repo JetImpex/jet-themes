@@ -40,6 +40,7 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 				'active_filters'    => 'yes',
 				'mobile_breakpoint' => 700,
 				'mobile_label'      => 'Filters',
+				'not_found'         => 'No themes were found matching your selection'
 			), $atts );
 
 			wp_enqueue_script( 'jet-themes' );
@@ -50,6 +51,7 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 				'filtersRoute'       => jet_themes_filters_api()->get_filters_route(),
 				'activeFiltersTitle' => 'Active Filters',
 				'mobileBreakpoint'   => $atts['mobile_breakpoint'],
+				'notFound'           => $atts['not_found'],
 			) );
 
 			$mobile_trigger = sprintf( '<div class="filters-mobile-trigger">%s</div>', $atts['mobile_label'] );

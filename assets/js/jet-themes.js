@@ -36,6 +36,11 @@
 			className: 'themes-list',
 
 			render: function() {
+
+				if ( ! this.collection.length ) {
+					this.$el.append( '<div class="themes-not-found">' + settings.notFound + '</div>' );
+				}
+
 				this.collection.each( function( theme ) {
 					var currentView = new itemView( {
 						model: theme,

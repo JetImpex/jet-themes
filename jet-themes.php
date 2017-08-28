@@ -102,7 +102,7 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 			add_action( 'init', array( $this, 'lang' ), 0 );
 
 			// Load the admin files.
-			add_action( 'init', array( $this, 'init' ), 0 );
+			add_action( 'init', array( $this, 'init' ), -999 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 

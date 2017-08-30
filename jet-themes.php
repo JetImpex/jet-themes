@@ -3,7 +3,7 @@
  * Plugin Name: Jet Themes
  * Plugin URI:  http://www.cherryframework.com/plugins/
  * Description: Themes Manager. Dependencies: Wapu Core to process own options.
- * Version:     1.1.0
+ * Version:     1.0.0
  * Author:      JetImpex
  * Author URI:  http://cherryframework.com/
  * Text Domain: jet-themes
@@ -63,7 +63,7 @@ if ( ! class_exists( 'Jet_Themes' ) ) {
 		 *
 		 * @var string
 		 */
-		private $version = '1.1.0';
+		private $version = '1.0.0';
 
 		/**
 		 * Core page trigger

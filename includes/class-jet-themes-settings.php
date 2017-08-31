@@ -29,6 +29,7 @@ if ( ! class_exists( 'Jet_Themes_Settings' ) ) {
 		 */
 		public function init() {
 			add_filter( 'wapu_core/general_setting', array( $this, 'register' ) );
+			add_action( 'wp_loaded', array( $this, 'test_request' ), 999 );
 		}
 
 		/**
@@ -96,11 +97,43 @@ if ( ! class_exists( 'Jet_Themes_Settings' ) ) {
 							),
 						),
 					),
+					'jet-test-request' => array(
+						'type'   => 'html',
+						'id'     => 'jet-type',
+						'name'   => 'jet-type',
+						'html'   => '<a href="' . add_query_arg( array( 'jet-test-request' => true ), admin_url( '/' ) ) . '" target="_blank">Send</a>',
+						'label'  => esc_html__( 'Test Request', 'jet-themes' ),
+						'parent' => 'jet-themes',
+					),
 				),
 			) );
 
 			return $settings;
 
+		}
+
+		/**
+		 * Send test request
+		 *
+		 * @return [type] [description]
+		 */
+		public function test_request() {
+
+			if ( ! isset( $_GET['jet-test-request'] ) ) {
+				return;
+			}
+
+			$data = array(
+				'sort'     => '-inserted_date',
+				'state'    => 1,
+				'per-page' => 1,
+				'page'     => 1,
+			);
+
+			$results = jet_themes_manager()->request( $data );
+
+			var_dump( $results );
+			die();
 		}
 
 		/**

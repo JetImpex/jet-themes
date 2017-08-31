@@ -86,8 +86,16 @@ if ( ! class_exists( 'Jet_Themes_Manager' ) ) {
 			$properties_data = $this->walk_properties( $data['properties'] );
 			$terms_data      = $this->walk_terms( $data );
 
+			$ld_format = jet_themes_settings()->get( 'jet-ld-format' );
+
+			if ( $ld_format ) {
+				$ld_link = sprintf( $ld_format, $data['templateId'] );
+			} else {
+				$ld_link = isset( $properties_data['live_demo'] ) ? $properties_data['live_demo'][0] : false;
+			}
+
 			$post_data['meta_input'] = array(
-				'jet_live_demo'  => isset( $properties_data['live_demo'] ) ? $properties_data['live_demo'][0] : false,
+				'jet_live_demo'  => $ld_link,
 				'jet_theme_page' => sprintf(
 					'https://www.templatemonster.com/%s/%s.html',
 					$data['templateType']['typeUrl'],

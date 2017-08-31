@@ -58,6 +58,14 @@ if ( ! class_exists( 'Jet_Themes_Settings' ) ) {
 					'label'  => esc_html__( 'Themes Type', 'jet-themes' ),
 					'parent' => 'jet-themes',
 				),
+				'jet-ld-format' => array(
+					'type'   => 'text',
+					'id'     => 'jet-ld-format',
+					'name'   => 'jet-ld-format',
+					'value'  => 'https://www.templatemonster.com/demo/%d.html',
+					'label'  => esc_html__( 'Live Demo link format', 'jet-themes' ),
+					'parent' => 'jet-themes',
+				),
 				'jet-property-taxonomies' => array(
 					'parent'      => 'jet-themes',
 					'type'        => 'repeater',
@@ -132,7 +140,7 @@ if ( ! class_exists( 'Jet_Themes_Settings' ) ) {
 
 			$results = jet_themes_manager()->request( $data );
 
-			var_dump( $results );
+			print_r( $results );
 			die();
 		}
 

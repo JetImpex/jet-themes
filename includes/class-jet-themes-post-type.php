@@ -201,7 +201,7 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 
 			return apply_filters( 'jet_themes/post_type/required_taxonomies', array(
 				'template-category' => array(
-					'name' => esc_html__( 'Catergory', 'jet-elements' ),
+					'name' => esc_html__( 'Category', 'jet-elements' ),
 					'key'  => 'templateCategory',
 				),
 			) );
@@ -253,6 +253,11 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 				'priority'      => 'low',
 				'callback_args' => false,
 				'fields'        => array(
+					'jet_theme_type' => array(
+						'type'    => 'select',
+						'title'   => esc_html__( 'Theme Type', 'jet-themes' ),
+						'options' => $this->get_available_themes_types(),
+					),
 					'jet_live_demo' => array(
 						'type'  => 'text',
 						'title' => esc_html__( 'Live Demo URL', 'jet-themes' ),
@@ -264,6 +269,33 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 				),
 			) );
 
+		}
+
+		/**
+		 * Return available themes types
+		 *
+		 * @return [type] [description]
+		 */
+		public function get_available_themes_types() {
+
+			$default    = jet_themes_settings()->get( 'jet-type' );
+			$additional = jet_themes_settings()->get( 'jet-add-types' );
+
+			$result = array(
+				$default => $default,
+			);
+
+			$adds = array();
+
+			if ( ! $additional ) {
+				return $result;
+			}
+
+			foreach ( $additional as $type ) {
+				$result[ $type['label'] ] = $type['label'];
+			}
+
+			return $result;
 		}
 
 		/**

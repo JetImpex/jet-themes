@@ -22,6 +22,7 @@ if ( ! class_exists( 'Jet_Themes_Manager' ) ) {
 
 		private $images_cdn = 'https://s.tmimgcdn.com/scr/';
 		private $screen_id  = 334;
+		private $type       = null;
 
 		/**
 		 * Process themes request.
@@ -29,11 +30,13 @@ if ( ! class_exists( 'Jet_Themes_Manager' ) ) {
 		 * @param  array  $args Request arguments.
 		 * @return array
 		 */
-		public function request( $args = array() ) {
+		public function request( $args = array(), $type = false ) {
 
 			$author = jet_themes_settings()->get( 'jet-author-id' );
-			$type   = jet_themes_settings()->get( 'jet-type' );
+			$type   = ( false !== $type ) ? $type : jet_themes_settings()->get( 'jet-type' );
 			$api    = jet_themes_api( array( 'author' => $author, 'type' => $type ) );
+
+			$this->type = $type;
 
 			return $api->request_themes( $args );
 		}
@@ -44,9 +47,9 @@ if ( ! class_exists( 'Jet_Themes_Manager' ) ) {
 		 * @param  array  $args Request arguments.
 		 * @return int
 		 */
-		public function insert_themes( $args = array() ) {
+		public function insert_themes( $args = array(), $type = false ) {
 
-			$themes  = $this->request( $args );
+			$themes  = $this->request( $args, $type );
 			$counter = 0;
 
 			if ( ! $themes ) {
@@ -95,6 +98,7 @@ if ( ! class_exists( 'Jet_Themes_Manager' ) ) {
 			}
 
 			$post_data['meta_input'] = array(
+				'jet_theme_type' => ( $this->type ) ? $this->type : jet_themes_settings()->get( 'jet-type' ),
 				'jet_live_demo'  => $ld_link,
 				'jet_theme_page' => sprintf(
 					'https://www.templatemonster.com/%s/%s.html',

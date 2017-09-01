@@ -44,6 +44,35 @@ if ( ! class_exists( 'Jet_Themes_Sheduled' ) ) {
 
 			add_action( $this->sheduled_action, array( $this, 'get_latest_themes' ) );
 
+			$this->shedule_additional();
+
+		}
+
+		/**
+		 * [shedule_additional description]
+		 * @return [type] [description]
+		 */
+		public function shedule_additional() {
+
+			$additional = jet_themes_settings()->get( 'jet-add-types' );
+
+			if ( ! $additional ) {
+				return;
+			}
+
+			foreach ( $additional as $type ) {
+
+				$action    = $this->sheduled_action . '_' . $type['label'];
+				$timestamp = wp_next_scheduled( $this->sheduled_action );
+
+				if ( false === $timestamp ) {
+					wp_schedule_event( time(), 'daily', $action );
+				}
+
+				add_action( $action, array( $this, 'get_latest_themes' ) );
+
+			}
+
 		}
 
 		public function testing_interval( $schedules ) {
@@ -65,6 +94,12 @@ if ( ! class_exists( 'Jet_Themes_Sheduled' ) ) {
 
 			wp_set_current_user( 1 );
 
+			if ( false !== strpos( current_filter(), $this->sheduled_action . '_' ) ) {
+				$type = str_replace( $this->sheduled_action . '_', '', current_filter() );
+			} else {
+				$type = jet_themes_settings()->get( 'jet-type' );
+			}
+
 			$data = array(
 				'sort'     => '-inserted_date',
 				'state'    => 1,
@@ -72,7 +107,7 @@ if ( ! class_exists( 'Jet_Themes_Sheduled' ) ) {
 				'page'     => 1,
 			);
 
-			$results = jet_themes_manager()->insert_themes( $data );
+			$results = jet_themes_manager()->insert_themes( $data, $type );
 
 		}
 

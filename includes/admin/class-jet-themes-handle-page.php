@@ -146,6 +146,16 @@ if ( ! class_exists( 'Jet_Themes_Handle_Page' ) ) {
 
 			$this->builder->register_control(
 				array(
+					'type' => array(
+						'type'        => 'select',
+						'id'          => 'type',
+						'name'        => 'type',
+						'value'       => '',
+						'options'     => jet_themes_post_type()->get_available_themes_types(),
+						'title'       => esc_html__( 'Themes Type', 'jet-themes' ),
+						'description' => esc_html__( 'Select themes type to get', 'jet-themes' ),
+						'parent'      => 'handler_content',
+					),
 					'per_page' => array(
 						'type'        => 'text',
 						'id'          => 'per_page',
@@ -238,7 +248,9 @@ if ( ! class_exists( 'Jet_Themes_Handle_Page' ) ) {
 				'page'     => isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1,
 			);
 
-			$this->results = jet_themes_manager()->insert_themes( $data );
+			$type = isset( $_POST['type'] ) ? esc_attr( $_POST['type'] ) : jet_themes_settings()->get( 'jet-type' );
+
+			$this->results = jet_themes_manager()->insert_themes( $data, $type );
 
 		}
 

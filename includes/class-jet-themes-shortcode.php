@@ -45,9 +45,15 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 
 			wp_enqueue_script( 'jet-themes' );
 
+			$per_page = jet_themes_settings()->get( 'jet-themes-per-page' );
+
+			if ( ! $per_page ) {
+				$per_page = 12;
+			}
+
 			wp_localize_script( 'jet-themes', 'jetThemesSettings', array(
 				'slug'               => jet_themes_post_type()->slug(),
-				'perPage'            => 6,
+				'perPage'            => $per_page,
 				'filtersRoute'       => jet_themes_filters_api()->get_filters_route(),
 				'activeFiltersTitle' => 'Active Filters',
 				'mobileBreakpoint'   => $atts['mobile_breakpoint'],

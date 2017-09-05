@@ -50,6 +50,14 @@ if ( ! class_exists( 'Jet_Themes_Settings' ) ) {
 					'label'  => esc_html__( 'Author ID', 'jet-themes' ),
 					'parent' => 'jet-themes',
 				),
+				'jet-themes-per-page' => array(
+					'type'   => 'text',
+					'id'     => 'jet-themes-per-page',
+					'name'   => 'jet-themes-per-page',
+					'value'  => 12,
+					'label'  => esc_html__( 'Themes per page in listing', 'jet-themes' ),
+					'parent' => 'jet-themes',
+				),
 				'jet-type' => array(
 					'type'   => 'text',
 					'id'     => 'jet-type',

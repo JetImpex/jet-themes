@@ -64,7 +64,7 @@ if ( ! class_exists( 'Jet_Themes_Shortcode' ) ) {
 
 			$result = array(
 				'all_filters'    => sprintf( '<div class="filters-wrap">%s</div>', $mobile_trigger ),
-				'themes'         => '<div class="themes-wrap">Loading...</div>',
+				'themes'         => '<div class="themes-wrap"><div class="themes-preloader"></div></div>',
 				'more'           => '<div class="more-wrap"></div>',
 			);
 

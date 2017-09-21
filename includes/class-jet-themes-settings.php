@@ -147,7 +147,7 @@ if ( ! class_exists( 'Jet_Themes_Settings' ) ) {
 			}
 
 			$data = array(
-				'sort'     => '-inserted_date',
+				'sort'     => '-sent_date',
 				'state'    => 1,
 				'per-page' => 1,
 				'page'     => 1,

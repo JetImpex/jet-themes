@@ -101,7 +101,7 @@ if ( ! class_exists( 'Jet_Themes_Sheduled' ) ) {
 			}
 
 			$data = array(
-				'sort'     => '-sent_date',
+				'sort'     => '-inserted_date',
 				'state'    => 1,
 				'per-page' => 3,
 				'page'     => 1,

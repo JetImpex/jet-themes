@@ -178,7 +178,8 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 		 * @return [type] [description]
 		 */
 		public function live_demo_url( $object, $field_name, $request ) {
-			return get_post_meta( $object['id'], 'jet_live_demo', true );
+			$url = get_post_meta( $object['id'], 'jet_live_demo', true );
+			return add_query_arg( array( 'aff' => 'ZEMEZ' ), $url );
 		}
 
 		/**
@@ -186,7 +187,8 @@ if ( ! class_exists( 'Jet_Themes_Filters_API' ) ) {
 		 * @return [type] [description]
 		 */
 		public function theme_url( $object, $field_name, $request ) {
-			return get_post_meta( $object['id'], 'jet_theme_page', true );
+			$url = get_post_meta( $object['id'], 'jet_theme_page', true );
+			return add_query_arg( array( 'aff' => 'ZEMEZ' ), $url );
 		}
 
 		/**

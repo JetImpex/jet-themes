@@ -87,6 +87,7 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 				'publicly_queryable'    => true,
 				'show_ui'               => true,
 				'show_in_menu'          => true,
+				'show_in_nav_menus'     => false,
 				'query_var'             => true,
 				'rewrite'               => array( 'slug' => $this->slug() ),
 				'capability_type'       => 'post',
@@ -153,8 +154,9 @@ if ( ! class_exists( 'Jet_Themes_Post_Type' ) ) {
 			foreach ( $prop_taxonomies as $tax => $data ) {
 				$this->property_alias[ $data['property'] ] = $tax;
 				register_taxonomy( $tax, $this->slug(), array(
-					'label'        => $data['name'],
-					'show_in_rest' => true,
+					'label'             => $data['name'],
+					'show_in_rest'      => true,
+					'show_in_nav_menus' => false,
 				) );
 			}
 
